@@ -96,11 +96,10 @@ export default class PortfolioPage extends React.Component {
       this.setState({
       cash: reply.data.balance,
       portfolioName: reply.data.name,
-      portfolio: reply.data,
       portfolioId: reply.data.id,
       totalPortfolios: reply.data.totalPortfolios,
       portfolioRank: reply.data.portfolioRank
-    },() => {this.calculatePortfolioValue(reply.data.stocks)})
+    },() => {this.calculatePortfolioValue(reply.data.stocks, reply.data)})
     })
     .catch(err => console.log(err, 'error'))
   }
@@ -114,13 +113,13 @@ export default class PortfolioPage extends React.Component {
     return true;
   }
 
-  calculatePortfolioValue(currencyArr) {
+  calculatePortfolioValue(currencyArr, port) {
     
     let tempVal = 0
     let count = 0
 
     if (this.isEmpty(currencyArr)) {
-      this.setState({ portfolioValue: this.state.cash },
+      this.setState({ portfolioValue: this.state.cash, portfolio: port },
       () => this.calculateReturn())
     } else {
       currencyArr.forEach((x, i) => {
@@ -135,7 +134,8 @@ export default class PortfolioPage extends React.Component {
               let newValue = (tempVal + this.state.cash).toFixed(2);
               this.setState({
                 portfolioValue: newValue,
-                stockValues: this.state.stockValues
+                stockValues: this.state.stockValues,
+                portfolio: port
               }, () => this.calculateReturn())
             }
           })
@@ -175,7 +175,7 @@ export default class PortfolioPage extends React.Component {
       if(stocks[i].ticker === stockData.ticker){
         stocks[i] = stockData;
         this.state.stockValues[stockData.ticker] = Math.round((Number(this.state.stockValues[stockData.ticker]) - Number(cashChange)) * 100)/100;
-        console.log(this.state.stockValues, 'NEW VALUE AFTER THING')
+
         this.setState({
           portfolio: this.state.portfolio,
           stockValues: this.state.stockValues,
