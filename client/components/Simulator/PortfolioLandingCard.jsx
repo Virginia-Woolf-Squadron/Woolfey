@@ -76,8 +76,8 @@ export default class PortfolioLandingCard extends React.Component {
           </button>
 
           :
-
-          <img id='loadingGif' src='/images/loading.gif' />
+          
+          <div className='loader'></div>
 
         }
 

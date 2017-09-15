@@ -102,7 +102,7 @@ export default class LandingPage extends React.Component {
 
             <div className='w3-col m4 w3-center'>
               <h3>JR Gray</h3>
-              <img src='/images/jr.jpg' className='founderPics w3-opacity-min w3-image w3-hover-opacity-off' />
+              <img src='/images/jr.jpg' className='founderPics w3-image' />
               <br />
               <br />
               <p><em>Founder / Developer</em></p>
@@ -119,7 +119,7 @@ export default class LandingPage extends React.Component {
 
             <div className='w3-col m4 w3-center'>
               <h3>Zander Jardini</h3>
-              <img src='/images/zander.jpg' className='founderPics w3-opacity-min w3-image w3-hover-opacity-off' />
+              <img src='/images/zander.jpg' className='founderPics w3-image ' />
               <br />
               <br />
               <p><em>Founder / Developer</em></p>
@@ -134,7 +134,7 @@ export default class LandingPage extends React.Component {
 
             <div className='w3-col m4 w3-center'>
               <h3>Eddie Keller</h3>
-              <img src='/images/eddie.jpg' className='founderPics w3-opacity-min w3-image w3-hover-opacity-off' />
+              <img src='/images/eddie.jpg' className='founderPics w3-image' />
               <br />
               <br />
               <p><em>Founder / Developer</em></p>

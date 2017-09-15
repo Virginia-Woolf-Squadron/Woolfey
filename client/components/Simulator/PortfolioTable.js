@@ -37,7 +37,7 @@ export default class PortfolioTable extends React.Component {
           showSpinner: false,
           wasMounted: true, 
           currency: {'btc':0,'bch':0,'xrp':0,'xmr':0,'ltc':0,'eth': 0}
-        }, () => console.log(this.state.stockValues,'AFTER SET STATE'))      
+        })      
       }
     }
   }

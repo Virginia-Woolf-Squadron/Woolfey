@@ -28,6 +28,7 @@ const coinSet = () => {
       leaderboard();
       createSet();
       hourlyLeaderboard.start();
+      dailyLeaderboard.start();
       bool = false;
     }
   }));
@@ -117,8 +118,6 @@ const appendCoinHistoricalData = (coin, price, date) => {
 //   })
 //   .catch(err => console.log(err))
 // }
-
-
 ///////////////////////////// LEADERBOARD /////////////////////////////////////
 
 const setCurrentLeaderboard = (coins,portfolios, cb) => {
@@ -144,8 +143,7 @@ const setCurrentLeaderboard = (coins,portfolios, cb) => {
   });
 }
 
-const hourlyLeaderboardHandler = () => {
- 
+const nonCurrentLeaderboardHandler = (boardCategory) => {
   fetchCoins((coins, portfolios) => {
     portfolios.forEach((portfolio, ind) => {
       Model.PortfolioStock.findAll({where:{portfolioId:portfolio.id}})
@@ -157,12 +155,12 @@ const hourlyLeaderboardHandler = () => {
         }
         portfolioValue += portfolio.balance;
         portfolioValue = Math.round(portfolioValue * 100) / 100;
-        Redis.hget(`hourlyLeaderboard:${portfolio.id}:setter`, 'total', (err, data) => {
+        Redis.hget(`${boardCategory}:${portfolio.id}:setter`, 'total', (err, data) => {
           if(data){
-            Redis.zadd('hourlyLeaderboard', Math.round((portfolioValue - Number(data)) * 100) / 100, portfolio.id);
+            Redis.zadd(`${boardCategory}`, Math.round((portfolioValue - Number(data)) * 100) / 100, portfolio.id);
           }
 
-          Redis.hset(`hourlyLeaderboard:${portfolio.id}:setter`, 'total', portfolioValue);
+          Redis.hset(`${boardCategory}:${portfolio.id}:setter`, 'total', portfolioValue);
         })
       })
     })
@@ -211,8 +209,8 @@ const leaderboard = () => {
 
 const getCoinsData = new CronJob({cronTime:'00 */2 * * * *', onTick: () => {coinSet()}, start: false,timeZone:'America/Los_Angeles', runOnInit: true});
 const collectDailyPortfolioData = new CronJob({cronTime:'00 30 23 * * *', onTick: () => {fetchCoins(storePortfolioData)}, start: false, timeZone:'America/Los_Angeles', runOnInit: false});
-const hourlyLeaderboard = new CronJob({cronTime: '00 00 * * * *', onTick: () => {hourlyLeaderboardHandler()}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
-
+const hourlyLeaderboard = new CronJob({cronTime: '00 00 * * * *', onTick: () => {nonCurrentLeaderboardHandler('hourlyLeaderboard')}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
+const dailyLeaderboard = new CronJob({cronTime: '00 00 */6 * * *', onTick: () => {nonCurrentLeaderboardHandler('dailyLeaderboard')}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
 
 getCoinsData.start();
 collectDailyPortfolioData.start();

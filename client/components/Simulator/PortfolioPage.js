@@ -7,7 +7,6 @@ import Navigation from '../Navbar'
 import TransactionModal from '../Profile/TransactionModal.jsx'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-import Footer from '../Footer'
 
 export default class PortfolioPage extends React.Component {
   constructor(props) {
@@ -240,19 +239,16 @@ export default class PortfolioPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className='container' id='portPage'>
-          <Navigation handleLogOut={this.handleLogOutAndRedirect} loggedIn={true} handleDelete={this.handleDelete}/> 
-          <PortfolioInfo totalPortfolios={this.state.totalPortfolios} portfolioRank={this.state.portfolioRank} portfolioStocks={this.state.portfolio.stocks} stockValues={this.state.stockValues} history={this.state.history} 
-            portfolioValue={this.state.portfolioValue} cash={this.state.cash} portfolioName={this.state.portfolioName} 
-            annualReturn={this.state.annualReturn} portfolioId ={this.state.portfolioId} portfolio = {this.state.portfolio} 
-            portfolioBalance={this.state.cash} successfulBuy={this.successfulBuy} successfulSell={this.successfulSell}
-            successfulPurge={this.successfulPurge} isOwner={this.state.isOwner} transactions = {this.state.transactions}
-          />
+      <div className='container' id='portPage'>
+        <Navigation handleLogOut={this.handleLogOutAndRedirect} loggedIn={true} handleDelete={this.handleDelete}/> 
+        <PortfolioInfo totalPortfolios={this.state.totalPortfolios} portfolioRank={this.state.portfolioRank} portfolioStocks={this.state.portfolio.stocks} stockValues={this.state.stockValues} history={this.state.history} 
+          portfolioValue={this.state.portfolioValue} cash={this.state.cash} portfolioName={this.state.portfolioName} 
+          annualReturn={this.state.annualReturn} portfolioId ={this.state.portfolioId} portfolio = {this.state.portfolio} 
+          portfolioBalance={this.state.cash} successfulBuy={this.successfulBuy} successfulSell={this.successfulSell}
+          successfulPurge={this.successfulPurge} isOwner={this.state.isOwner} transactions = {this.state.transactions}
+        />
+      
         
-          
-        </div>
-        <Footer />
       </div>
     )
   }

@@ -8,7 +8,6 @@ import Auth from '../../Auth/Auth.jsx'
 import Navigation from '../Navbar'
 import { Button, Modal, Navbar } from 'react-bootstrap'
 import PortfolioLandingCard from './PortfolioLandingCard.jsx'
-import Footer from '../Footer'
 
 export default class PortfolioLanding extends React.Component {
   constructor() {
@@ -352,47 +351,44 @@ export default class PortfolioLanding extends React.Component {
   
   render() {
     return (
-      <div>
-        <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-xs-12'>
-              <div id="container" className="landingChart"></div>
-            </div>
-          </div>
-
-          <div className='row'>
-            <div className="col-xs-4 col-xs-offset-4 text-center createPortBtn">
-              <Button className="text-center" bsStyle="primary" bsSize="large" onClick={this.open}>+ Create Portfolio</Button>
-            </div>
-          </div>
-
-          <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
-              <Modal.Title>Create portfolio</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <h4>Portfolio name:</h4>
-              <input name="name" onChange={this.handleChange} onKeyPress={this.handleKeyPress} type="text" size="30"/>
-              <br/>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={this.handleSubmit}>Submit</Button>
-              <Button onClick={this.close}>Close</Button>
-            </Modal.Footer>
-          </Modal>
-
-          <div className="row">
-            {this.state.portfolios.map((item, index) => (
-              <Link key={index} to={{pathname:`/simulator/${item.id}`, state: this.state.portfolios}} >
-                <div className="col-xs-4 text-center port-list-div">
-                  <PortfolioLandingCard item={item} />
-                </div>
-              </Link>
-            ))}
+      <div className='container'>
+        <div className='row'>
+          <div className='col-xs-12'>
+            <div id="container" className="landingChart"></div>
           </div>
         </div>
-        <Footer /> 
+        <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>
+
+        <div className='row'>
+          <div className="col-xs-4 col-xs-offset-4 text-center createPortBtn">
+            <Button className="text-center" bsStyle="primary" bsSize="large" onClick={this.open}>+ Create Portfolio</Button>
+          </div>
+        </div>
+
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create portfolio</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Portfolio name:</h4>
+            <input name="name" onChange={this.handleChange} onKeyPress={this.handleKeyPress} type="text" size="30"/>
+            <br/>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleSubmit}>Submit</Button>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <div className="row">
+          {this.state.portfolios.map((item, index) => (
+            <Link key={index} to={{pathname:`/simulator/${item.id}`, state: this.state.portfolios}} >
+              <div className="col-xs-4 text-center port-list-div">
+                <PortfolioLandingCard item={item} />
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     )
   }

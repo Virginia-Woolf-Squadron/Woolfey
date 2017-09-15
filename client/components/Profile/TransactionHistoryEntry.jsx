@@ -15,19 +15,19 @@ export default class TransactionHistoryEntry extends Component {
             <div className='row'>
               <div className='col-xs-2 col-xs-offset-1'>
                 {transaction.ticker}
-                </div>
-                <div className='col-xs-2'>
-                  {transaction.transactionType}
-                  </div>
-                  <div className='col-xs-2'>
-                    {transaction.shares}
-                    </div>
-                  <div className='col-xs-2'>
-                    ${transaction.transactionPrice}
-                    </div>
-                  <div className='col-xs-3'>
-                    {this.props.timeHandler(Number(transaction.createdAt))}
-                      </div>
+              </div>
+              <div className='col-xs-2'>
+                {transaction.transactionType}
+              </div>
+              <div className='col-xs-2'>
+                {transaction.shares}
+              </div>
+              <div className='col-xs-2'>
+                ${transaction.transactionPrice}
+              </div>
+              <div className='col-xs-3'>
+                {this.props.timeHandler(Number(transaction.createdAt))}
+              </div>
             </div>
         );
     }

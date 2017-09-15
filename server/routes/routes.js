@@ -37,7 +37,7 @@ router.get('/getPortfolioHistory', portfolio.getPortfolioHistory);
 
 
 router.get('/portfolioTransactionHistory', transactionController.portfolioHistory);
-router.get('/fetchLeaderboard', leaderboard.fetchLeaderboard);
+router.get('/fetchSpecificLeaderboard', leaderboard.fetchLeaderboard);
 
 router.get('/getNewsFeed', function(req, res) {
   let urls = {

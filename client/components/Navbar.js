@@ -20,7 +20,7 @@ export default class Navigation extends React.Component {
             <Navbar.Brand>
               <a href="/">Woolfey</a>
             </Navbar.Brand>
-            <Navbar.Toggle />
+            <Navbar.Toggle /> 
           </Navbar.Header>
           <Navbar.Collapse>
     
@@ -45,19 +45,24 @@ export default class Navigation extends React.Component {
             {this.props.loggedIn ?
             
             <Nav pullRight>
-              <NavDropdown eventKey={5} title="Profile" id="basic-nav-dropdown">
-                <MenuItem eventKey={5.1} href="/portfolio">My Portfolios</MenuItem>
-                <MenuItem eventKey={5.2} href="/" onClick={this.props.handleLogOut}>Logout</MenuItem>
-              </NavDropdown>
+              <LinkContainer to='/portfolio'>
+                <NavItem eventKey={6} >Portfolios</NavItem>
+              </LinkContainer>
+
+              <LinkContainer exact to='/'>
+                <NavItem onClick={this.props.handleLogOut}>Logout</NavItem>
+              </LinkContainer>
             </Nav>
 
             :
 
             <Nav pullRight>
-              <Navbar.Brand>
-                <a href="/login">Log in</a>
-              </Navbar.Brand>
+              <LinkContainer to='/login'>
+                <NavItem eventKey={8} >Login</NavItem>
+              </LinkContainer>
+             
             </Nav>
+
             
             }
             {this.props.handleDelete ?

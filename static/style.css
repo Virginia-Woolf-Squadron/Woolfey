@@ -69,6 +69,7 @@ body {
 .bgimg-1 {
     background-image: url('/images/girl.jpg');
     min-height: 800px;
+
 }
 
 /* Second image (Portfolio) */
@@ -78,18 +79,17 @@ body {
 }
 
 /* Third image (Contact) */
-.bgimg-3 {
-    background-image: url("./images/girl2.jpg");
-    min-height: 400px;
-}
 
 .w3-wide {letter-spacing: 10px;}
 .w3-hover-opacity {cursor: pointer;}
 
 /* Turn off parallax scrolling for tablets and phones */
 @media only screen and (max-device-width: 1024px) {
-    .bgimg-1, .bgimg-2, .bgimg-3 {
+    .bgimg-1, .bgimg-2 {
         background-attachment: scroll;
+    }
+    .bgimg-1 {
+      min-height: 400px
     }
 }
 
@@ -238,18 +238,18 @@ th, td {
   font-size: 100px;
 }
 
-#loadingGif {
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 400px;
-  height: 400px;
-}
 .leaderboardHeader {
   border-bottom: 1px dashed;
+}
+.leaderboard-loader {
+
+  border: 7px solid #f3f3f3 ; /* Light grey */
+  border-top: 7px solid #42cef4; /* Blue */
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  margin: 18% 0 0 46%; 
 }
 .navbar {
   position: fixed;
@@ -282,9 +282,11 @@ th, td {
   margin-left: -40px;
 }
 
-#currBuyInput {
-  margin-left: -12px;
-}
+.currBuyInput {
+  margin-left: 2.7%;
+  margin-bottom: -1%;
+  margin-top: 3.5%;
+} 
 
 .landingChart {
   height: 400px;
@@ -422,8 +424,7 @@ tbody tr:nth-child(odd) {
 
 .footer2 .footer {
     background-color: #fcfcfc;
-    padding: 35px 0;
-    margin-top: 5em;
+    margin-top: 4em;
 }
 
 .footer2 .footer nav h3 {
@@ -543,7 +544,8 @@ tbody tr:nth-child(odd) {
 }
 
 .pull-left, .pull-right {
-  padding-top: 12px;
+  padding-top: 13px;
+  text-decoration: none;
 }
 
 .founderPics {
@@ -553,7 +555,22 @@ tbody tr:nth-child(odd) {
   z-index: -1;
 }
 
+/* Wrapper for page content to push down footer */
 #app {
-  width: 100%;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
+  padding: 0 0 40px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 48px;
+  background-color: #222728;
+  color: lightgray;
+  font-size: 13px;
+}
+
+div a:hover {
+  text-decoration: none;
+  color: white;
 }

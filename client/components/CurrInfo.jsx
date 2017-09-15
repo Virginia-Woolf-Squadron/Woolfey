@@ -4,7 +4,6 @@ import Navigation from './Navbar.js'
 import PortfolioLandingCard from './Simulator/PortfolioLandingCard.jsx'
 import { Button, Modal } from 'react-bootstrap'
 import {Link, Redirect} from 'react-router-dom'
-import Footer from './Footer.js'
 
 export default class CurrInfo extends React.Component {
   constructor() {
@@ -49,6 +48,7 @@ export default class CurrInfo extends React.Component {
     this.handleArticleClick = this.handleArticleClick.bind(this)
     this.getPredictionData = this.getPredictionData.bind(this)
     this.handleLogOut = this.handleLogOut.bind(this)
+    this.counter = this.counter.bind(this)
   }
 
   componentDidMount() {
@@ -74,10 +74,7 @@ export default class CurrInfo extends React.Component {
         this.setState({ currentValue }, () => {
           let data = history.data
           this.setState({ data }, () => {
-            this.state.chartCounter += 1
-            if (this.state.chartCounter === 2) {
-              this.createChart()
-            }
+            this.counter()
           })
         })
       }))
@@ -92,6 +89,13 @@ export default class CurrInfo extends React.Component {
     .then(reply => this.setState({portfolios: reply.data,
                                   isLoggedIn: true}))
     .catch(err => console.log(err, 'error'))
+  }
+
+  counter() {
+    this.state.chartCounter++;
+    if(this.state.chartCounter === 2){
+      this.createChart();
+    }
   }
 
   getPredictionData() {
@@ -116,13 +120,12 @@ export default class CurrInfo extends React.Component {
           }
         })
       } else {
-        this.state.chartCounter++;
-        if(this.state.chartCounter === 2){
-          this.createChart();
-        }
+        this.counter()
       }
     })
-    .catch(err => console.log('error', err))
+    .catch(err => {
+      this.counter()
+    })
   }
 
   handleBuy() {
@@ -555,82 +558,89 @@ export default class CurrInfo extends React.Component {
     }
 
     var spanStyle = {
-      fontSize: '1.5em'
+      fontSize: '1.3em'
     }
 
-    let displayPurchasePrice = this.state.purchasePrice ? <span style={spanStyle}>  x  {this.state.currentValue}  =  {`$${this.state.purchasePrice}`}</span> : null
+    let displayPurchasePrice = this.state.purchasePrice && this.state.purchasePrice !== 'NaN' ? <span style={spanStyle}>  x  {this.state.currentValue}  =  {`$${this.state.purchasePrice}`}</span> : null
 
     return (
-      <div>
+      <div className='container'>
         <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.isLoggedIn}/>
-        <div className='container'>
 
-          <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
-              <Modal.Title>{this.state.action} {this.state.currencyName.toUpperCase()} - Choose portfolio</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <form onSubmit={this.handleSubmitPriceCheck}>
-                <input id='currBuyInput' type='number' className='text-center' placeholder='Enter amount' onChange={this.handleInputChange} />
-                { displayPurchasePrice }
-              </form>
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.state.action} {this.state.currencyName.toUpperCase()} - Choose portfolio</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={this.handleSubmitPriceCheck}>
+              <input type='text' maxLength="7" className='text-center currBuyInput' placeholder='Enter amount' onChange={this.handleInputChange} />
+              { displayPurchasePrice }
+            </form>
 
-              <br/>
+            <br/>
 
-              <div className="container">
-                <div className="row">
-                  {this.state.portfolios.map((item, index) => (
-                    <div className="port-list-modal" key={index}>
-                      <PortfolioLandingCard item={item} modalClick={this.modalClick} />
-                    </div> 
-                  ))}
-                </div>
+            <div className="container">
+              <div className="row">
+                {this.state.portfolios.map((item, index) => (
+                  <div className="port-list-modal" key={index}>
+                    <PortfolioLandingCard item={item} modalClick={this.modalClick} />
+                  </div> 
+                ))}
               </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={this.handleSubmit}>{this.state.action}</Button>
-              <Button onClick={this.close}>Close</Button>
-            </Modal.Footer>
-          </Modal>
-          
-          {this.state.currentValue !== '' ?
-          <div className="currInfo">
-            <div className='row'>
-              <div className='col-xs-4 col-xs-offset-2 curr-info-price'>
-                <h1>{this.state.currencyName.toUpperCase()} - {this.state.currentValue}</h1>
-                <p style={{ color: this.state.valueIncrease ? 'green' : 'red' }}><i className={this.state.valueIncrease ? "fa fa-arrow-up" : "fa fa-arrow-down"} aria-hidden="true"></i> {this.state.valueChange}% </p>
-              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleSubmit}>{this.state.action}</Button>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+        
+        {this.state.currentValue !== '' ?
+        <div className="currInfo">
+          <div className='row'>
+            <div className='col-xs-4 col-xs-offset-2 curr-info-price'>
+              <h1>{this.state.currencyName.toUpperCase()} - {this.state.currentValue}</h1>
+              <p style={{ color: this.state.valueIncrease ? 'green' : 'red' }}><i className={this.state.valueIncrease ? "fa fa-arrow-up" : "fa fa-arrow-down"} aria-hidden="true"></i> {this.state.valueChange}% </p>
+            </div>
+
+              {this.state.isLoggedIn ? 
+
               <div className='col-xs-4 col-xs-offset-2'>
                 <button className='btn btn-primary buy-btn' onClick={this.handleBuy} style={buttonStyle}>Buy</button>
                 <button className='btn btn-danger sell-btn' onClick={this.handleSell} style={buttonStyle}>Sell</button>
               </div>
-            </div>
-            <div className='row'>
-              <div className='col-xs-10 col-xs-offset-1'>
-                <div id='container' style={highchartStyle}></div>
-              </div>
-            </div>
 
-            <div className='row'>
-              <div className='col-xs-10 col-xs-offset-1'>
-                <h2>Recent News</h2>
-                <ul>
-                  {this.state.articles.map((article, index) => 
-                    <a key={index}  onClick={(e) => this.handleArticleClick(e, article)} className="newsArticle"><li>{article[0]}</li></a>
-                  )}
-                </ul>
-              </div>
+              :
+
+              null
+
+              }
+
+          </div>
+          <div className='row'>
+            <div className='col-xs-10 col-xs-offset-1'>
+              <div id='container' style={highchartStyle}></div>
             </div>
           </div>
 
-            : 
-            
-
-          <div className='currency-loader'></div>
-
-            }
+          <div className='row'>
+            <div className='col-xs-10 col-xs-offset-1'>
+              <h2>Recent News</h2>
+              <ul>
+                {this.state.articles.map((article, index) => 
+                  <a key={index}  onClick={(e) => this.handleArticleClick(e, article)} className="newsArticle"><li>{article[0]}</li></a>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
-        <Footer />
+
+          : 
+          
+
+        <div className='currency-loader'></div>
+
+          }
       </div>
     )
   }

@@ -26,6 +26,7 @@
     "fs": "0.0.1-security",
     "jsonwebtoken": "^7.4.3",
     "lodash.chunk": "^4.2.0",
+    "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "pg": "^7.2.0",

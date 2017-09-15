@@ -16,7 +16,7 @@ module.exports = {
     })
   },
   getPredictionData: (req, res) => {
-    console.log(req.query)
+
     Model.Prediction.findOne({where: {currency: req.query.currency}})
     .then(response => {
       res.send(response);
