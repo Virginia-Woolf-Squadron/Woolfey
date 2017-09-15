@@ -353,14 +353,13 @@ export default class PortfolioLanding extends React.Component {
   render() {
     return (
       <div>
+        <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>
         <div className='container'>
           <div className='row'>
             <div className='col-xs-12'>
               <div id="container" className="landingChart"></div>
             </div>
           </div>
-
-          <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>
 
           <div className='row'>
             <div className="col-xs-4 col-xs-offset-4 text-center createPortBtn">

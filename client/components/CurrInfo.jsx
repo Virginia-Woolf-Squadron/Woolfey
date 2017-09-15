@@ -562,8 +562,8 @@ export default class CurrInfo extends React.Component {
 
     return (
       <div>
+        <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.isLoggedIn}/>
         <div className='container'>
-          <Navigation handleLogOut={this.handleLogOut} loggedIn={this.state.isLoggedIn}/>
 
           <Modal show={this.state.showModal} onHide={this.close}>
             <Modal.Header closeButton>
