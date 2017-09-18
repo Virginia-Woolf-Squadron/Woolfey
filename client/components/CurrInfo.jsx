@@ -440,13 +440,16 @@ export default class CurrInfo extends React.Component {
   getNewsFeed() {
     axios.get('/api/getNewsFeed', {params: decodeURI(window.location.pathname.slice(10))})
       .then(data => {
+        
         var regex = /(<([^>]+)>)/ig
         let tempArr = []
         for (let i = 0; i < data.data.feed.entry.length; i++) {
           var body = data.data.feed.entry[i].title.$t
-          var result = body.replace(regex, "")
-          var result2 = result.replace(/&#39;/g, "'")
-          tempArr.push([result2, data.data.feed.entry[i].link.href])
+          if(body){
+            var result = body.replace(regex, "")
+            var result2 = result.replace(/&#39;/g, "'")
+            tempArr.push([result2, data.data.feed.entry[i].link.href])
+          }
         }
         this.setState({
           articles: tempArr
@@ -470,7 +473,7 @@ export default class CurrInfo extends React.Component {
           this.setState({
             input: '',
             purchasePrice: ''
-          }, () => { alert('Success!') })
+          })
         });
       } else {
         alert('Insufficient Funds');
@@ -505,7 +508,7 @@ export default class CurrInfo extends React.Component {
               this.setState({
                 input: '',
                 purchasePrice: ''
-              }, () => alert('Success!'))
+              })
             }
           })
         }

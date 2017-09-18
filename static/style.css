@@ -151,10 +151,6 @@ body {
   margin-top: -4px;
 }
 
-#simulatorSelectedCurrency {
-  margin-top: 7px;
-}
-
 .infoBuySell {
   margin-top: 25px;
   width: 80px;
@@ -278,9 +274,6 @@ th, td {
   margin-bottom: 50px;
 }
 
-.purchasePrice {
-  margin-left: -40px;
-}
 
 .currBuyInput {
   margin-left: 2.7%;
@@ -296,11 +289,50 @@ th, td {
   margin-top: 100px;
 }
 
+#simulatorSelectedCurrency {
+  margin-top: 7px;
+}
+
 #selectedCurrencyText {
   font-size: 20px;
   margin-top: -5px;
 }
 
+.purchasePrice {
+  margin-left: -40px;
+}
+@media screen and (max-width: 840px){
+  #selectedCurrencyText {
+    display: block;
+    font-size: 20px;
+  } 
+  .buy-sell{
+    display: block;
+    margin-top: 5%;
+    margin-left: 12%;
+  }
+  .purchasePrice {
+    margin-left: 35%;
+  }
+  .purchase-selector {
+    margin-left: 26%;
+  }
+  #bottomSimPurchase {
+    margin-left: 3%;
+  }
+  .portfolio-landing-responsive {
+    margin-left: -46%;
+  }
+  /* #simulatorSelectedCurrency {
+    padding-top: 10px;
+    display: block;
+  } */
+}
+@media screen and (max-width: 568px){
+  .display-price-mobile {
+    margin-top: 7%;
+  }
+}
 .loginSignupSubmitBtn {
   margin-top: 10px;
 }
@@ -395,6 +427,9 @@ th, td {
   border-color: #ff8100 !important;
 } */
 tbody tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+.colored-offset:nth-child(odd) {
   background-color: #f1f1f1;
 }
 

@@ -362,7 +362,7 @@ export default class PortfolioLanding extends React.Component {
 
         <div className='row'>
           <div className="col-xs-4 col-xs-offset-4 text-center createPortBtn">
-            <Button className="text-center" bsStyle="primary" bsSize="large" onClick={this.open}>+ Create Portfolio</Button>
+            <Button className="text-center portfolio-landing-responsive" bsStyle="primary" bsSize="large" onClick={this.open}>+ Create Portfolio</Button>
           </div>
         </div>
 

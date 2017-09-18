@@ -14,8 +14,13 @@ buy: (req, res) => {
   .then(stockData => {
     if(stockData){
       let newStockValue = Math.round(Number(stockData.dataValues.shares) + Number(req.body.shares) * req.body.buyPrice * 100) / 100;
-      Redis.hmget(`portfolio:${req.body.portfolioId}:hash`, 'total', `${req.body.ticker}:amount`,(err, data) => {
-        Redis.hmset(`portfolio:${req.body.portfolioId}:hash`, `${req.body.ticker}:shares`, stockData.dataValues.shares + req.body.shares, `${req.body.ticker}:amount`, newStockValue, 'total', data[0] - data[1] + newStockValue);
+      Redis.hmget(`portfolio:${req.body.portfolioId}:hash`, 'total', `${req.body.ticker}:amount`, 'liquid', (err, data) => {
+        if(data){
+
+          Redis.hmset(`portfolio:${req.body.portfolioId}:hash`, `${req.body.ticker}:shares`, stockData.dataValues.shares + req.body.shares, `${req.body.ticker}:amount`, newStockValue, 'total', data[0] - data[1] + newStockValue, 'liquid', Math.round((Number(data[2]) - req.body.finalPrice)*100)/100);
+        } else {
+          console.log('Redis error', req.body.portfolioId)
+        }
       })
       db.query(`UPDATE portfolio_stocks SET shares = shares + ${req.body.shares} WHERE id = ${stockData.dataValues.id}`)
       .then(() => {
@@ -38,8 +43,12 @@ buy: (req, res) => {
         });
       })
     } else {
-        Redis.hget(`portfolio:${req.body.portfolioId}:hash`, 'total', (err, data) => {
-          Redis.hmset(`portfolio:${req.body.portfolioId}:hash`, `${req.body.ticker}:shares`, req.body.shares, `${req.body.ticker}:amount`, req.body.finalPrice, 'total', Number(data[0]) + Number(req.body.finalPrice));
+        Redis.hget(`portfolio:${req.body.portfolioId}:hash`, 'total', 'liquid', (err, data) => {
+          if(data){
+            Redis.hmset(`portfolio:${req.body.portfolioId}:hash`, `${req.body.ticker}:shares`, req.body.shares, `${req.body.ticker}:amount`, req.body.finalPrice,'liquid', Math.round((Number(data[1]) - req.body.finalPrice) * 1000) / 1000,'total', Number(data[0]) + Number(req.body.finalPrice));
+          } else {
+            console.log('Redis error', req.body.portfolioId)
+          }
         });
         Model.PortfolioStock.create({
           portfolioId: req.body.portfolioId,

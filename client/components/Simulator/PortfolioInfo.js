@@ -264,8 +264,8 @@ export default class PortfolioInfo extends React.Component {
     };
     return (
       <div>
-        <div style={{'marginTop':'60px'}} className='row'>
-          <div className='col-xs-4 portfolioDetails'>
+        <div style={{'marginTop':'60px'}} className='row portfolio-top-mobile'>
+          <div className='col-xs-12 col-sm-4 portfolioDetails'>
             <h2>{this.state.portfolioName} <span className='rank'>&nbsp; Ranked: {this.state.portfolioRank}</span></h2>
             <p>Portfolio Value: ${this.state.portfolioValue}</p>
             <p>Cash: ${this.state.cash}</p>
@@ -278,7 +278,7 @@ export default class PortfolioInfo extends React.Component {
               successfulBuy={this.props.successfulBuy} successfulSell={this.props.successfulSell} isOwner={this.props.isOwner} />
             
           </div>
-          <div className='col-xs-8'>
+          <div className='col-xs-12 col-sm-8'>
             <PortfolioTable portfolioStocks={this.props.portfolioStocks} stockValues={this.props.stockValues} 
               portfolioValue={this.props.portfolioValue} 
             />

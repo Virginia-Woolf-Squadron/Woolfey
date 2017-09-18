@@ -235,7 +235,7 @@ export default class StockSimulator extends React.Component {
           <div className='col-xs-1'>
             <img src='/images/ripplelogo.jpg' style={this.state.selectedCurrency === 'xrp' ? highlight : noHighlight } className='currencyButton' id='xrp' onClick={this.handleCurrencySelectionChange} />
           </div> */}
-          <div className='col-xs-6'>
+          <div className='col-xs-offset-3 col-xs-9 col-sm-6 col-sm-offset-0 purchase-selector'>
             <select defaultValue='btc' onChange={this.handleCurrencySelectionChange} >
               <option value="btc">Bitcoin (BTC)</option>
               <option value="bch">Bitcoin Cash (BCH)</option>
@@ -245,8 +245,8 @@ export default class StockSimulator extends React.Component {
               <option value="xrp">Ripple (XRP)</option>
             </select>
           </div>
-          <div className='col-xs-6'>
-            <div id='simulatorSelectedCurrency'>
+          <div className='col-xs-offset-3 col-xs-9 col-sm-6 col-sm-offset-0 purchase-selector' id='simulatorSelectedCurrency'>
+            <div >
               <h4 id='selectedCurrencyText'> {this.state.selectedCurrency} - ${this.state.displayedValue} </h4>
             </div>
           </div>
@@ -267,16 +267,16 @@ export default class StockSimulator extends React.Component {
         </div> */}
         {this.state.isOwner ? 
         <div className='row' id='bottomSimPurchase'>
-          <div className='col-xs-10'>
+          <div className='col-xs-offset-2 col-xs-10 col-sm-10 col-sm-offset-0'>
             <form onSubmit={this.handleSubmitPriceCheck}>
-              <input id='currBuyInput' type='number' className='text-center' placeholder='Enter amount to buy' onChange={this.handleInputChange} />
-              <span>
+              <input id='currBuyInput' type='number' className='text-center display-price-mobile' placeholder='Enter amount to buy' onChange={this.handleInputChange} />
+              <span className="buy-sell">
                 <button className='btn btn-primary buySellBtn' onClick={this.handleAddStock}>Buy</button>
                 <button className='btn btn-danger buySellBtn' onClick={this.handleSellStock}>Sell</button>
               </span>
             </form>
           </div>
-          <div className='col-xs-2 text-left purchasePrice'>
+          <div className='col-xs-offset-4 col-xs-8 col-sm-2 col-sm-offset-2 text-left purchasePrice'>
             {this.state.purchasePrice !== '$NaN' && this.state.purchasePrice !== '' && !(!this.state.purchasePrice) 
               ? <p>{this.state.purchasePrice}</p> 
               : <p>0.00</p>

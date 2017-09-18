@@ -67,7 +67,7 @@ export default class Navigation extends React.Component {
 
             {this.props.handleDelete ?
 
-          <Nav pullRight onDoubleClick ={this.props.handleDelete}>
+          <Nav pullRight onClick ={this.props.handleDelete}>
             
             <NavItem eventKey={4} className='deleteButton'>Delete</NavItem>
             

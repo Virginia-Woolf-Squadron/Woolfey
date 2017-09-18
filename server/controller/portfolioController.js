@@ -46,14 +46,15 @@ module.exports ={
     .then(reply => {
       const portfolios = reply.map(x => x.dataValues);
       portfolios.forEach(x => Redis.srem(`${x.ticker}:members`, req.query.portfolioId));
-    })
-    Model.Portfolio.destroy({
-      where: {id: req.query.portfolioId}
-    })
-    .then(reply => {
-      Redis.del(`portfolio:${req.query.portfolioId}:hash`);
-      Redis.zrem('leaderboard', req.query.portfolioId);
-      res.json(reply)
+      Model.Portfolio.destroy({
+        where: {id: req.query.portfolioId}
+      })
+      .then(reply => {
+        Model.PortfolioHistory.destroy({where: {portfolio_id: req.query.portfolioId}});
+        Redis.del(`portfolio:${req.query.portfolioId}:hash`);
+        Redis.zrem('leaderboard', req.query.portfolioId);
+        res.json(reply)
+      })
     })
   },
   isOwnerOfPortfolio: (req, res) => {
