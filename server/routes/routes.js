@@ -25,7 +25,7 @@ router.post('/signup', user.signup);
 router.get('/isOwnerOfPortfolio', auth.authenticate, portfolio.isOwnerOfPortfolio);
 
 router.get('/getUserData', auth.authenticate, portfolioStock.getUserData);
-router.get('/getSpecificPortfolio', auth.authenticate, portfolio.getSpecificPortfolio);
+router.get('/getSpecificPortfolio', portfolio.getSpecificPortfolio);
 router.delete('/deletePortfolio', auth.authenticate, portfolio.deletePortfolio);
 
 router.post('/buy', auth.authenticate, portfolioStock.buy);

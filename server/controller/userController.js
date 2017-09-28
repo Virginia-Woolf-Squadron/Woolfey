@@ -4,11 +4,14 @@ const auth = require('./authenticateController.js');
 
 module.exports = {
   signup: (req, res) => {
-    Model.User.findOne({where: {handle: req.body.handle}})
+    let base64encoded = req.headers['authorization'].split(' ')[1];
+    let convert = Buffer.from(base64encoded, 'base64').toString('utf8').split(':');
+    
+    Model.User.findOne({where: {handle: convert[0]}})
     .then(response => {
       if(!response){
-        hasher.generatePassword(req.body.password, hash => {
-          Model.User.create({handle: req.body.handle, password: hash})
+        hasher.generatePassword(convert[1], hash => {
+          Model.User.create({handle: convert[0], password: hash})
           .then(user => auth.getToken(user.dataValues.id, user.dataValues.handle, res))
         })
       } else {
@@ -17,12 +20,14 @@ module.exports = {
     })
   },
   login: (req, res) => {
-    Model.User.findOne({where: {handle: req.query.handle}})
+    let base64encoded = req.headers['authorization'].split(' ')[1];
+    let convert = Buffer.from(base64encoded, 'base64').toString('utf8').split(':');
+    Model.User.findOne({where: {handle: convert[0]}})
     .then(user => {
       if(!user){
           res.send('invalid');
       } else {
-          hasher.comparePassword(req.query.password, user.dataValues.password, (reply) => {
+          hasher.comparePassword(convert[1], user.dataValues.password, (reply) => {
             if(reply){
               auth.getToken(user.dataValues.id, user.dataValues.handle, res);
             } else {

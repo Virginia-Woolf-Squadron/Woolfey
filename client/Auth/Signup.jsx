@@ -6,26 +6,47 @@ class Signup extends React.Component {
     constructor(props){
         super(props);
         this.Auth = new Auth;
-        this.state = {username: '', password: ''};
+        this.state = {username: '', password: '', forbidden: '<>\\/{}[]:;\'"^'.split('')}
         this.handlePassword = this.handlePassword.bind(this);
         this.handleUsername = this.handleUsername.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkSpecialCharacters = this.checkSpecialCharacters.bind(this);
+        this.checkPasswordRequirements = this.checkPasswordRequirements.bind(this);  
     }
+    
     handleUsername(event) {
         this.setState({username: event.target.value});
     }
     handlePassword(event){
         this.setState({password: event.target.value})
     }
+    checkSpecialCharacters(){
+      if(this.state.forbidden.every(x => this.state.username.indexOf(x) < 0 && this.state.password.indexOf(x) < 0)){
+        return true;
+      } else {
+        return false;
+      }
+    }
+    checkPasswordRequirements(){
+      let password = this.state.password;
+      return password.toLowerCase() !== password && password.toUpperCase() !== password && /\d/.test(password) && password.length <= 10 && password.length >= 5;
+    }
     handleSubmit(event) {
         event.preventDefault();
-        this.Auth.signup(this.state.username, this.state.password, (reply) => {
-            if(reply !== 'invalid'){
-              this.props.handleSignUp();
-              window.location = '/portfolio'
-            }
-
-        })
+        if(this.checkSpecialCharacters()){
+          if(this.checkPasswordRequirements()){
+            this.Auth.signup(this.state.username, this.state.password, (reply) => {
+              if(reply !== 'invalid'){
+                this.props.handleSignUp();
+                window.location = '/portfolio'
+              }
+            })
+          } else {
+            alert('Password doesn\'t meet requirements')
+          }
+        } else {
+          alert('No special characters');
+        }
         this.setState({username: '', password: ''});
     }
 
@@ -50,6 +71,12 @@ class Signup extends React.Component {
                             <button type="submit" className='btn btn-primary btn-block loginSignupSubmitBtn' value="Submit">Submit</button>
                         </div>
                     </form>
+                    <ul aria-label="Password requires: ">
+                    <li>one lowercase letter</li>
+                    <li>one uppercase letter</li>
+                    <li>one number</li>
+                    <li>between 5-10 characters</li>
+                    </ul>
                 </div>
              
             </div>

@@ -4,7 +4,12 @@ body, html {
     color: #777;
     line-height: 1.8;
 }
-
+ul:before{
+  content:attr(aria-label);
+  font-size:120%;
+  font-weight:bold;
+  margin-left:-15px;
+}
 body {
   background-color: #fcfcfc;
 }

@@ -9,6 +9,7 @@ module.exports ={
     })
     .then(portfolio => {
       Redis.hmset(`portfolio:${portfolio.dataValues.id}:hash`, ['liquid', portfolio.dataValues.balance, 'total', portfolio.dataValues.balance]);
+      Redis.zadd('hourlyLeaderboard', 0, portfolio.dataValues.id);
       Redis.zadd('leaderboard', portfolio.dataValues.balance, portfolio.dataValues.id);
       res.send(portfolio);
     })
@@ -53,6 +54,8 @@ module.exports ={
         Model.PortfolioHistory.destroy({where: {portfolio_id: req.query.portfolioId}});
         Redis.del(`portfolio:${req.query.portfolioId}:hash`);
         Redis.zrem('leaderboard', req.query.portfolioId);
+        Redis.zrem('hourlyLeaderboard', req.query.portfolioId);
+        Redis.zrem('dailyLeaderboard', req.query.portfolioId);
         res.json(reply)
       })
     })

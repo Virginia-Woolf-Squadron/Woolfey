@@ -4,7 +4,7 @@ const Redis = require('../../database/redis/redis.js') ;
 const axios = require('axios');
 const chunk = require('lodash.chunk');
 
-const coins = ['btc', 'bch', 'eth', 'ltc', 'xmr', 'xrp', 'zec'];
+const coins = ['btc', 'bch', 'eth', 'ltc', 'xmr', 'xrp'];
 let bool = true;
 
 
@@ -14,11 +14,12 @@ const coinSet = () => {
     resp.map(x => x.data).forEach((coin, i) => {
       Redis.set(`${coins[i]}:price`, coin.last_price, (err, data) => {
         Redis.get(`${coins[i]}:previous:price`, (err, oldData) => {
-          if(err) {
-            Redis.set(`${coins[i]}:previous:price}`, coin.last_price);
+          if(oldData === 'null' || oldData == null) {
+            Redis.set(`${coins[i]}:previous:price`, coin.last_price);
           }
-          else if(Math.abs((coin.last_price - oldData)/oldData) > .1) {
+          else if(Math.abs((coin.last_price - oldData)/oldData) > .01) {
             triggerLeaderboardCalculation(coins[i], coin.last_price);
+            updateHourlyLeaderboardChange(coins[i], oldData, coin.last_price);
             Redis.set(`${coins[i]}:previous:price`, coin.last_price);
           } 
         })  
@@ -117,14 +118,55 @@ const setCurrentLeaderboard = (coins,portfolios, cb) => {
         currencyArray.push(stockVal);
       }
       const completeCurrencyArray = currencyArray.concat('liquid').concat(portfolio.balance).concat('total').concat(Math.round((currencyValue + portfolio.balance) * 100) / 100);
-
       Redis.hmset(`portfolio:${portfolio.id}:hash`, completeCurrencyArray);
       Redis.zadd('leaderboard', Math.round((currencyValue + portfolio.balance) * 100) / 100, portfolio.id);
     })
   });
 }
 
+
+const updateHourlyLeaderboardChange = (currency, oldPrice, newPrice) => {
+  
+  Redis.smembers(`${currency}:members`, (err, members) => {
+    members.forEach(id => {
+      Redis.zscore('hourlyLeaderboard', id, (err, score) => {
+
+        Redis.hget(`portfolio:${id}:hash`, `${currency}:shares`, (err, total) => {
+          if(total !==  'null'){
+            if(score){
+              Redis.zadd(`hourlyLeaderboard`, Number(score) + ((Number(newPrice) - Number(oldPrice)) * Number(total)), id)
+            } else {
+              Redis.zadd('hourlyLeaderboard', (Number(newPrice) - Number(oldPrice)) * Number(total), id);
+            }
+          } 
+        })
+      })
+      
+    })
+  })
+}
+
+const setHourlyLeaderboardChange = () => {
+  Model.Portfolio.findAll({})
+  .then(portfoliosData => {
+    const portfolios = portfoliosData.map(x => x.dataValues);
+    portfolios.map(portfolio => {
+      Redis.zadd(`hourlyLeaderboard`, 0, portfolio.id)
+    })
+  })
+}
+
 const nonCurrentLeaderboardHandler = (boardCategory) => {
+  // Model.Portfolio.findAll({})
+  // .then(portfoliosData => {
+  //   const portfolios = portfoliosData.map(x => x.dataValues);
+  //   Promise.all(portfolios.map(portfolio => new Promise((resolve, reject) => {
+  //     Redis.hget(`portfolio:${portfolio.id}:hash`, 'total', (err, data) => {
+  //       resolve([data, portfolio])
+  //     })
+  //   })))
+  //   .then()
+  // })
   fetchCoins((coins, portfolios) => {
     portfolios.forEach((portfolio, ind) => {
       Model.PortfolioStock.findAll({where:{portfolioId:portfolio.id}})
@@ -152,9 +194,9 @@ const triggerLeaderboardCalculation = (ticker, newValue) => {
   Redis.smembers(`${ticker}:members`, (err, members) => {
     members.forEach(id => {
       Redis.hmget(`portfolio:${id}:hash`, `${ticker}:shares`, `${ticker}:amount`,'total', (err, data) => {   
-        let newCurrencyValue = Math.round(Number(data[0]) * Number(data[1]) * 100) / 100;
+        let newCurrencyValue = Math.round(Number(data[0]) * newValue * 100) / 100;
         let newTotal = Math.round((Number(data[2]) - Number(data[1]) + newCurrencyValue) * 100) / 100;
-        Redis.hmset(`portfolio:${data}:hash`, `${ticker}:amount`, newCurrencyValue, 'total', newTotal);
+        Redis.hmset(`portfolio:${id}:hash`, `${ticker}:amount`, newCurrencyValue, 'total', newTotal);
         Redis.zadd('leaderboard', newTotal, id);
       })
     })
@@ -190,8 +232,8 @@ const leaderboard = () => {
 
 const getCoinsData = new CronJob({cronTime:'00 */2 * * * *', onTick: () => {coinSet()}, start: false,timeZone:'America/Los_Angeles', runOnInit: true});
 const collectDailyPortfolioData = new CronJob({cronTime:'00 30 23 * * *', onTick: () => {fetchCoins(storePortfolioData)}, start: false, timeZone:'America/Los_Angeles', runOnInit: false});
-const hourlyLeaderboard = new CronJob({cronTime: '00 00 * * * *', onTick: () => {nonCurrentLeaderboardHandler('hourlyLeaderboard')}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
-const dailyLeaderboard = new CronJob({cronTime: '00 00 */4 * * *', onTick: () => {nonCurrentLeaderboardHandler('dailyLeaderboard')}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
+const hourlyLeaderboard = new CronJob({cronTime: '00 00 * * * *', onTick: () => {setHourlyLeaderboardChange()}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
+const dailyLeaderboard = new CronJob({cronTime: '00 00 */24 * * *', onTick: () => {nonCurrentLeaderboardHandler('dailyLeaderboard')}, start: false, timeZone: 'America/Los_Angeles', runOnInit: true});
 
 getCoinsData.start();
 collectDailyPortfolioData.start();

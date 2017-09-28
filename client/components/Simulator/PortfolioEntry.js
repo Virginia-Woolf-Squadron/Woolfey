@@ -20,8 +20,6 @@ export default class PortfolioEntry extends React.Component {
   }
 
   componentDidMount() {
-    console.log('stockValue is:', this.state.stockValue)
-    console.log('origValue is:', this.state.origValue)
     this.calculateCurrencyReturn()
   }
 

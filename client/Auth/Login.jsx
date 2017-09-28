@@ -6,10 +6,11 @@ class Login extends React.Component {
     constructor(props){
         super(props);
         this.Auth = new Auth;
-        this.state = {username: '', password: ''};
+        this.state = {username: '', password: '', forbidden: '<>\\/{}[]:;\'"^'.split('')};
         this.handleUsername = this.handleUsername.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkSpecialCharacters=this.checkSpecialCharacters.bind(this);
     }
     handleUsername(event) {
         this.setState({username: event.target.value});
@@ -17,14 +18,25 @@ class Login extends React.Component {
     handlePassword(event){
         this.setState({password: event.target.value})
     }
+    checkSpecialCharacters(){
+      if(this.state.forbidden.every(x => this.state.username.indexOf(x) < 0 && this.state.password.indexOf(x) < 0)){
+        return true;
+      } else {
+        return false;
+      }
+    }
     handleSubmit(event) {
         event.preventDefault();
-        this.Auth.login(this.state.username, this.state.password, (reply) => {
+        if(this.checkSpecialCharacters()){
+          this.Auth.login(this.state.username, this.state.password, (reply) => {
             if(reply !== 'invalid'){
               this.props.handleLogin();
               window.location = '/portfolio'
             }
-        })
+          })
+        } else {
+          alert('No special characters');
+        }
         this.setState({username: '', password: ''});
     }
     render() {

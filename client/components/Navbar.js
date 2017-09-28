@@ -65,7 +65,7 @@ export default class Navigation extends React.Component {
               </NavDropdown>
             </Nav>
 
-            {this.props.handleDelete ?
+            {this.props.handleDelete && this.props.isOwner ?
 
           <Nav pullRight onClick ={this.props.handleDelete}>
             
