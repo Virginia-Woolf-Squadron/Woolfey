@@ -24,7 +24,8 @@ export default class PortfolioPage extends React.Component {
       history: [],
       transactions: [],
       isOwner: false,
-      origValues: {}
+      origValues: {},
+      currValues: {}
     }
     this.checkForOwner = this.checkForOwner.bind(this)
     this.fetchPortfolioTransactions = this.fetchPortfolioTransactions.bind(this)
@@ -90,14 +91,27 @@ export default class PortfolioPage extends React.Component {
       'xmr': 0
     }
 
+    let sellValues = { 
+      'btc': 0,
+      'bch': 0,
+      'ltc': 0,
+      'eth': 0,
+      'xrp': 0,
+      'xmr': 0
+    }
+
     const transactions = this.state.transactions
 
     for (let i = 0; i < transactions.length; i++) {
+      // transactions[i].transactionType === "buy" ? 
+      // origValues[transactions[i].ticker] += (transactions[i].shares*transactions[i].transactionPrice) : 
+      // origValues[transactions[i].ticker] -= (transactions[i].shares*transactions[i].transactionPrice)
+
       transactions[i].transactionType === "buy" ? 
       origValues[transactions[i].ticker] += (transactions[i].shares*transactions[i].transactionPrice) : 
-      origValues[transactions[i].ticker] -= (transactions[i].shares*transactions[i].transactionPrice)
+      sellValues[transactions[i].ticker] += (transactions[i].shares*transactions[i].transactionPrice)
     }
-    this.setState({ origValues })
+    this.setState({ origValues, sellValues })
   }
   
   handleFetchData(){
@@ -273,7 +287,7 @@ export default class PortfolioPage extends React.Component {
           annualReturn={this.state.annualReturn} portfolioId ={this.state.portfolioId} portfolio = {this.state.portfolio} 
           portfolioBalance={this.state.cash} successfulBuy={this.successfulBuy} successfulSell={this.successfulSell}
           successfulPurge={this.successfulPurge} isOwner={this.state.isOwner} transactions = {this.state.transactions}
-          origValues={this.state.origValues}
+          origValues={this.state.origValues} sellValues={this.state.sellValues}
         />
       
         

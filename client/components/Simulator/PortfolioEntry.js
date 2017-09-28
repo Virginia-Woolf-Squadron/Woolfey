@@ -6,6 +6,7 @@ export default class PortfolioEntry extends React.Component {
     this.state = {
       stockValue: this.props.stockValues[this.props.item.ticker],
       origValue: this.props.origValues[this.props.item.ticker],
+      sellValue: this.props.sellValues[this.props.item.ticker],
       stockReturn: 0,
       mixValue: ((parseFloat(props.stockValues[this.props.item.ticker]) / parseFloat(props.portfolioValue)) * 100).toFixed(2)
     }
@@ -41,8 +42,13 @@ export default class PortfolioEntry extends React.Component {
   }
 
   calculateCurrencyReturn() {
-    let stockReturn = this.state.origValue !== 0 ?
-   ((this.state.stockValue - this.state.origValue) / this.state.origValue*100).toFixed(2) : 0
+  //   let stockReturn = this.state.origValue !== 0 ?
+  //  ((this.state.stockValue - this.state.origValue) / this.state.origValue*100).toFixed(2) : 0
+
+  //   this.setState({ stockReturn })
+
+    let stockReturn = this.props.item.shares === 0 ? 0 :
+    (((this.state.stockValue + this.state.sellValue) - this.state.origValue) / this.state.origValue*100).toFixed(2)
 
     this.setState({ stockReturn })
   }

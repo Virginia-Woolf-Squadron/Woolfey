@@ -279,7 +279,7 @@ export default class PortfolioInfo extends React.Component {
           </div>
           <div className='col-xs-12 col-sm-8'>
             <PortfolioTable portfolioStocks={this.props.portfolioStocks} stockValues={this.props.stockValues} 
-              portfolioValue={this.props.portfolioValue} origValues={this.props.origValues}
+              portfolioValue={this.props.portfolioValue} origValues={this.props.origValues} sellValues={this.props.sellValues}
             />
           </div>
         </div>
