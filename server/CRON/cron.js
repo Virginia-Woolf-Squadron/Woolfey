@@ -17,7 +17,7 @@ const coinSet = () => {
           if(oldData === 'null' || oldData == null) {
             Redis.set(`${coins[i]}:previous:price`, coin.last_price);
           }
-          else if(Math.abs((coin.last_price - oldData)/oldData) > .01) {
+          else if(Math.abs((coin.last_price - oldData)/oldData) > .001) {
             triggerLeaderboardCalculation(coins[i], coin.last_price);
             updateHourlyLeaderboardChange(coins[i], oldData, coin.last_price);
             Redis.set(`${coins[i]}:previous:price`, coin.last_price);
