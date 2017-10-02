@@ -42,11 +42,6 @@ export default class PortfolioEntry extends React.Component {
   }
 
   calculateCurrencyReturn() {
-  //   let stockReturn = this.state.origValue !== 0 ?
-  //  ((this.state.stockValue - this.state.origValue) / this.state.origValue*100).toFixed(2) : 0
-
-  //   this.setState({ stockReturn })
-
     let stockReturn = this.props.item.shares === 0 ? 0 :
     (((this.state.stockValue + this.state.sellValue) - this.state.origValue) / this.state.origValue*100).toFixed(2)
 
@@ -63,8 +58,8 @@ export default class PortfolioEntry extends React.Component {
 
     return (
       <tr>
-        <td>{this.getCurrencyName(this.props.item.ticker)} </td>
-        <td>{this.props.item.ticker} </td>
+        <td>{this.getCurrencyName(this.props.item.ticker)} ({this.props.item.ticker.toUpperCase()})</td>
+        {/* <td>{this.props.item.ticker.toUpperCase()} </td> */}
         <td>{Math.round(this.props.item.shares * 1000) / 1000} </td>
         <td>${this.state.stockValue} </td>
         <td>{isNaN(this.state.mixValue) ? '0.00' :  ((parseFloat(this.props.stockValues[this.props.item.ticker]) / parseFloat(this.props.portfolioValue)) * 100).toFixed(2)}%</td>

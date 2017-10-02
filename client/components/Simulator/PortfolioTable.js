@@ -84,7 +84,7 @@ export default class PortfolioTable extends React.Component {
         <thead className='thead-default'>
           <tr>
             <th style={{ 'textAlign':'center' }}>Asset</th>
-            <th style={{ 'textAlign':'center' }}>Ticker</th>
+            {/* <th style={{ 'textAlign':'center' }}>Ticker</th> */}
             <th style={{ 'textAlign':'center' }}>Qty</th>
             <th style={{ 'textAlign':'center' }}>Value</th>
             <th style={{ 'textAlign':'center' }}>Mix</th>     
