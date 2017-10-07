@@ -10,6 +10,8 @@ export default class Navigation extends React.Component {
 
   render() {
 
+    const loggedIn = localStorage.getItem('token') ? true : false
+
     return (
       <div className="navbar">
         <Navbar inverse collapseOnSelect>
@@ -24,7 +26,8 @@ export default class Navigation extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
 
-            {this.props.loggedIn ?
+            {/* {this.props.loggedIn ? */}
+            {loggedIn ?
             
             <Nav pullRight>
               <LinkContainer to='/portfolio'>
