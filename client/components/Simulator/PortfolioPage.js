@@ -25,7 +25,9 @@ export default class PortfolioPage extends React.Component {
       transactions: [],
       isOwner: false,
       origValues: {},
-      currValues: {}
+      currValues: {},
+      token: localStorage.getItem('token'),
+      loggedIn: false
     }
     this.checkForOwner = this.checkForOwner.bind(this)
     this.fetchPortfolioTransactions = this.fetchPortfolioTransactions.bind(this)
@@ -41,17 +43,34 @@ export default class PortfolioPage extends React.Component {
     this.isEmpty = this.isEmpty.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.calculateOriginalStockValues = this.calculateOriginalStockValues.bind(this)
+    this.authorize = this.authorize.bind(this)
     
   }
   componentDidMount() {
+    this.authorize()
     this.checkForOwner()
     this.fetchPortfolioTransactions()
   }
+
+  authorize() {
+    axios({
+      method: 'get',
+      url: '/api/loggedIn',
+      headers: {authorization: this.state.token}
+    })
+    .then(response => {
+      console.log(response.status)
+      const loggedIn = response.status === 200 ? true : false
+      this.setState({ loggedIn })
+    })
+    .catch(err => console.error(err))
+  }
+
   checkForOwner(){
     axios({
       method: 'get',
       url: '/api/isOwnerOfPortfolio',
-      headers: {authorization: localStorage.getItem('token')},
+      headers: {authorization: this.state.token},
       params: {portfolioId: this.state.portfolioId}
     })
     .then(reply => {
@@ -103,9 +122,6 @@ export default class PortfolioPage extends React.Component {
     const transactions = this.state.transactions
 
     for (let i = 0; i < transactions.length; i++) {
-      // transactions[i].transactionType === "buy" ? 
-      // origValues[transactions[i].ticker] += (transactions[i].shares*transactions[i].transactionPrice) : 
-      // origValues[transactions[i].ticker] -= (transactions[i].shares*transactions[i].transactionPrice)
 
       transactions[i].transactionType === "buy" ? 
       origValues[transactions[i].ticker] += (transactions[i].shares*transactions[i].transactionPrice) : 
@@ -281,7 +297,7 @@ export default class PortfolioPage extends React.Component {
   render() {
     return (
       <div className='container' id='portPage'>
-        <Navigation handleLogOut={this.handleLogOutAndRedirect} loggedIn={true} handleDelete={this.handleDelete} isOwner={this.state.isOwner}/> 
+        <Navigation handleLogOut={this.handleLogOutAndRedirect} loggedIn={this.state.loggedIn} handleDelete={this.handleDelete} isOwner={this.state.isOwner}/> 
         <PortfolioInfo totalPortfolios={this.state.totalPortfolios} portfolioRank={this.state.portfolioRank} portfolioStocks={this.state.portfolio.stocks} stockValues={this.state.stockValues} history={this.state.history} 
           portfolioValue={this.state.portfolioValue} cash={this.state.cash} portfolioName={this.state.portfolioName} 
           annualReturn={this.state.annualReturn} portfolioId ={this.state.portfolioId} portfolio = {this.state.portfolio} 

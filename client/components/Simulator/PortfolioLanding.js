@@ -22,7 +22,7 @@ export default class PortfolioLanding extends React.Component {
       name: '',
       seriesOptions: [],
       seriesCounter: 0,
-      names: ['btc','bch','eth','ltc','xmr','xrp','zec']
+      names: ['btc','bch','eth','ltc','xmr','xrp']
     }
     this.handleFetchData = this.handleFetchData.bind(this)
     this.createPort = this.createPort.bind(this)

@@ -16,7 +16,7 @@ router.get('/getToken', auth.getToken);
 
 /////////
 
-
+router.get('/loggedIn', auth.authenticate, (req, res) => res.send('true'))
 
 router.get('/coinQuery', portfolioStock.coinQuery);
 

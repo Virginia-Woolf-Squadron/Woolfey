@@ -1,16 +1,15 @@
 import React from 'react'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
-import {Link} from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
+import {Link} from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
+import axios from 'axios'
 
 export default class Navigation extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
-
-    const loggedIn = localStorage.getItem('token') ? true : false
 
     return (
       <div className="navbar">
@@ -26,8 +25,7 @@ export default class Navigation extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
 
-            {/* {this.props.loggedIn ? */}
-            {loggedIn ?
+            {this.props.loggedIn ?
             
             <Nav pullRight>
               <LinkContainer to='/portfolio'>
