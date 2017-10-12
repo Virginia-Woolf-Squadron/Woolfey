@@ -267,8 +267,8 @@ export default class PortfolioInfo extends React.Component {
           <div className='col-xs-12 col-sm-4 portfolioDetails'>
             <h2>{this.state.portfolioName} <span className='rank'>&nbsp; Ranked: {this.state.portfolioRank}</span></h2>
             <p>Portfolio Value: ${this.state.portfolioValue}</p>
-            <p>Cash: ${this.state.cash}</p>
-            <p>Annual Return: {isNaN(this.state.annualReturn) ? 'Calculating...' : (Number(this.state.annualReturn) * 100).toFixed(2)}%</p>
+            <p>Remaining Cash: ${Number(this.state.cash).toFixed(2)}</p>
+            <p>Lifetime Return: {isNaN(this.state.annualReturn) ? 'Calculating...' : (Number(this.state.annualReturn) * 100).toFixed(2)}%</p>
             <Button bsSize="xsmall" onClick={this.handleTransactionModal}>Buy/Sell History</Button>
             <TransactionModal transactions={this.props.transactions} showModal={this.state.showModal} />
             <hr />
