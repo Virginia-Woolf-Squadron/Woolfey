@@ -233,7 +233,9 @@ export default class PortfolioInfo extends React.Component {
         maskColor: 'rgba(255,255,255,0.3)'
       };
       Highcharts.setOptions(Highcharts.theme);
-    if (this.state.history) {
+    if (data) {
+      data.sort((a,b) => a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
+      console.log(data);
       Highcharts.stockChart('container', {
         rangeSelector: { 
           selected: 1 
@@ -267,8 +269,8 @@ export default class PortfolioInfo extends React.Component {
           <div className='col-xs-12 col-sm-4 portfolioDetails'>
             <h2>{this.state.portfolioName} <span className='rank'>&nbsp; Ranked: {this.state.portfolioRank}</span></h2>
             <p>Portfolio Value: ${this.state.portfolioValue}</p>
-            <p>Cash: ${this.state.cash}</p>
-            <p>Annual Return: {isNaN(this.state.annualReturn) ? 'Calculating...' : (Number(this.state.annualReturn) * 100).toFixed(2)}%</p>
+            <p>Remaining Cash: ${Number(this.state.cash).toFixed(2)}</p>
+            <p>Lifetime Return: {isNaN(this.state.annualReturn) ? 'Calculating...' : (Number(this.state.annualReturn) * 100).toFixed(2)}%</p>
             <Button bsSize="xsmall" onClick={this.handleTransactionModal}>Buy/Sell History</Button>
             <TransactionModal transactions={this.props.transactions} showModal={this.state.showModal} />
             <hr />
@@ -279,7 +281,7 @@ export default class PortfolioInfo extends React.Component {
           </div>
           <div className='col-xs-12 col-sm-8'>
             <PortfolioTable portfolioStocks={this.props.portfolioStocks} stockValues={this.props.stockValues} 
-              portfolioValue={this.props.portfolioValue} origValues={this.props.origValues}
+              portfolioValue={this.props.portfolioValue} origValues={this.props.origValues} sellValues={this.props.sellValues}
             />
           </div>
         </div>

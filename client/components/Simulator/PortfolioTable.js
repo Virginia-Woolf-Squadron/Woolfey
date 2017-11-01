@@ -84,7 +84,7 @@ export default class PortfolioTable extends React.Component {
         <thead className='thead-default'>
           <tr>
             <th style={{ 'textAlign':'center' }}>Asset</th>
-            <th style={{ 'textAlign':'center' }}>Ticker</th>
+            {/* <th style={{ 'textAlign':'center' }}>Ticker</th> */}
             <th style={{ 'textAlign':'center' }}>Qty</th>
             <th style={{ 'textAlign':'center' }}>Value</th>
             <th style={{ 'textAlign':'center' }}>Mix</th>     
@@ -94,7 +94,12 @@ export default class PortfolioTable extends React.Component {
         <tbody>
           {this.state.entries ?
           this.state.entries.map((item, index) => (
-            this.state.stockValues[item.ticker] !== undefined ? <PortfolioEntry item={item} key={index} origValues={this.props.origValues} stockValues={this.state.stockValues} portfolioValue={this.state.portfolioValue} /> : null
+            this.state.stockValues[item.ticker] !== undefined ? 
+            <PortfolioEntry item={item} key={index} sellValues={this.props.sellValues} 
+            origValues={this.props.origValues} stockValues={this.state.stockValues} 
+            portfolioValue={this.state.portfolioValue} />
+            : 
+            null
           ))
           :
           null
