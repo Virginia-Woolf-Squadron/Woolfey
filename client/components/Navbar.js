@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import axios from 'axios'
 
-export default class Navigation extends React.Component {
+export default class NavBar extends React.Component {
   constructor(props) {
     super(props)
   }

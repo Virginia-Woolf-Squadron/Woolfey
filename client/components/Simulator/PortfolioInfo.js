@@ -233,7 +233,9 @@ export default class PortfolioInfo extends React.Component {
         maskColor: 'rgba(255,255,255,0.3)'
       };
       Highcharts.setOptions(Highcharts.theme);
-    if (this.state.history) {
+    if (data) {
+      data.sort((a,b) => a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
+      console.log(data);
       Highcharts.stockChart('container', {
         rangeSelector: { 
           selected: 1 
